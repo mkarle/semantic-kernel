@@ -90,3 +90,43 @@ class MathSkill(PydanticField):
             return str(result)
         else:
             raise ValueError("Context amount should not be None.")
+
+    @sk_function(
+        description="Multiplies value to a value",
+        name="Multiply",
+        input_description="The value to multiply",
+    )
+    @sk_function_context_parameter(
+        name="Amount",
+        description="Amount to multiply",
+    )
+    def multiply(self, initial_value_text: str, context: "SKContext") -> str:
+        """
+        Returns the multiplication result of initial and amount values provided.
+
+        :param initial_value_text: Initial value as string to multiply the specified amount
+        :param context: Contains the context to get the numbers from
+        :return: The resulting multiplication as a string
+        """
+        try:
+            initial_value = int(initial_value_text)
+        except ValueError:
+            raise ValueError(
+                f"Initial value provided is not in numeric format: {initial_value_text}"
+            )
+
+        context_amount = context["Amount"]
+        if context_amount is not None:
+            try:
+                amount = int(context_amount)
+            except ValueError:
+                raise ValueError(
+                    "Context amount provided is not in numeric format:"
+                    f" {context_amount}"
+                )
+
+            result = initial_value * amount
+            return str(result)
+        else:
+            raise ValueError("Context amount should not be None.")
+        
